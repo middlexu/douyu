@@ -7,8 +7,8 @@ import datetime
 # import re
 # import json
 from conf.settings import *
-# import threading
-# import db
+import threading
+from . import db
 import logging
 
 
@@ -19,18 +19,20 @@ class DouyuClient():
 
     # gift = json.load(open(os.path.join(BASE_DIR, 'conf', 'gift.json'), 'r', encoding='utf-8'))  # 由下面的self.gift替换了
 
-    def __init__(self, roomid, db, gift):
+    def __init__(self, room, gift):
         '''
-        :param roomid:  str类型
+        :param room:  namedtuple类型
         :param db:  SaveDb实例
         :param gift:  {giftid: (giftname, giftprice)}
         '''
         self.dyclient = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.dyclient.connect((HOST, PORT))
-        self.login(roomid)
-        self.roomid = roomid
-        self.db = db
+        self.roomid = room.roomid
+        self.room_nickname = room.nickname
         self.gift = gift
+        self.login(self.roomid)
+        
+        self.db = db.SaveDb(self.room_nickname)
         self.handledanmu = HandleDanmu(self.roomid, self.db, self.gift)
         # logger = logging.getLogger()
         # logger.setLevel(logging.INFO)
@@ -96,6 +98,10 @@ class DouyuClient():
             # 觉得上面这一段还不如  data = data + self.dyclient.recv(BUFSIZ) 写这一句
             data = data + self.dyclient.recv(BUFSIZ)
             # print(data)
+            if not data:
+                print(threading.getCurrentThread().getName() + '退出了')
+                break
+
             if b'/\x00' in data:  # 有一个（两个...）完整的记录
                 # print(data)
                 danmu_list = data.split(b'/\x00')
@@ -172,7 +178,7 @@ class HandleDanmu():
             'time': datetime.datetime.now(),
         }
         if data['rid'] == self.roomid:
-            print(result_dict['usrname'] + '\t' + result_dict['txt'] + '\t' + str(result_dict['time']))
+            # print(result_dict['usrname'] + '\t' + result_dict['txt'] + '\t' + str(result_dict['time']))
             self.db.save_to_mongodb(self.db.danmu_table, **result_dict)
 
     def dgb(self, data):  # 礼物
@@ -185,15 +191,16 @@ class HandleDanmu():
                 'price': self.gift[data['gfid']][1],
                 'time': datetime.datetime.now()
             }
-            data['gfcnt'] = int(data['gfcnt'])  # 一次性送了多少个
-            while data['gfcnt'] > 0:
-                print(result_dict['usrname'] + '\t' + '送出了' + '\t' + result_dict['giftname'] + '\t' + str(result_dict['time']))
-                self.db.save_to_mongodb(self.db.gift_table, **result_dict)
-                data['gfcnt'] -= 1
+            if data['rid'] == self.roomid:
+                data['gfcnt'] = int(data['gfcnt'])  # 一次性送了多少个
+                while data['gfcnt'] > 0:
+                    # print(result_dict['usrname'] + '\t' + '送出了' + '\t' + result_dict['giftname'] + '\t' + str(result_dict['time']))
+                    self.db.save_to_mongodb(self.db.gift_table, **result_dict)
+                    data['gfcnt'] -= 1
 
     def anbc(self, data):  # 开通贵族，续费好像不是这个关键字
         if data['drid'] == self.roomid:
-            print(data['unk'] + '\t在 ' + data['donk'] + '  直播间 开通了\t' + NOBLE_DICT[data['nl']].name)
+            # print(data['unk'] + '\t在 ' + data['donk'] + '  直播间 开通了\t' + NOBLE_DICT[data['nl']].name)
             result_dict = {
                 'uid': data['uid'],
                 'usrname': data['unk'],

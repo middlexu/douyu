@@ -6,6 +6,7 @@ MONGO_DB = "douyu"
 
 DB_USER = "douyu"
 DB_PWD = "password"
+# DB_PWD = "Xu731583158"  # 服务器
 
 HOST = socket.gethostbyname('openbarrage.douyutv.com')
 print(HOST)
@@ -15,13 +16,22 @@ BUFSIZ = 1024
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# F4, 339, 9438, 正直博
-# ROOM_ID_LIST = ['318624', '485503', '430489', '533813', ]
-ROOM_ID_LIST = ['229346', ]
+
 
 from collections import namedtuple
 
+# F4, 339, 9438, 正直博, 401
+Room = namedtuple('Room', 'roomid nickname')
+ROOM_ID_LIST = [Room('318624', 'f4'), 
+                Room('485503', '339'), 
+                Room('430489', '9438'), 
+                Room('533813', '正直博'), 
+                Room('229346', '401')]
+
+
+
 Noble = namedtuple('Noble', ['name', 'price'])  # 这个price表示可以收到多少钱
+# Noble = namedtuple('Noble', 'name price')  # 这么写也是可以的
 
 NOBLE_DICT = {
     '1': Noble('骑士', 200),
