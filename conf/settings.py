@@ -9,8 +9,10 @@ DB_PWD = "password"
 # DB_PWD = "Xu731583158"  # 服务器
 
 HOST = socket.gethostbyname('openbarrage.douyutv.com')
-print(HOST)
-HOST = "124.95.155.50"
+# print(HOST)
+# HOST = "124.95.155.50"  # 这个还会换
+# HOST = "119.97.145.131"
+
 PORT = 8601
 BUFSIZ = 1024
 
