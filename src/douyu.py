@@ -188,15 +188,17 @@ class HandleDanmu():
                 'usrname': data['nn'],
                 'giftid': data['gfid'],
                 'giftname': self.gift[data['gfid']][0],
+                'gfcnt': int(data['gfcnt']),
                 'price': self.gift[data['gfid']][1],
                 'time': datetime.datetime.now()
             }
             if data['rid'] == self.roomid:
-                data['gfcnt'] = int(data['gfcnt'])  # 一次性送了多少个
-                while data['gfcnt'] > 0:
-                    # print(result_dict['usrname'] + '\t' + '送出了' + '\t' + result_dict['giftname'] + '\t' + str(result_dict['time']))
-                    self.db.save_to_mongodb(self.db.gift_table, **result_dict)
-                    data['gfcnt'] -= 1
+                # data['gfcnt'] = int(data['gfcnt'])  # 一次性送了多少个
+                # while data['gfcnt'] > 0:
+                #     # print(result_dict['usrname'] + '\t' + '送出了' + '\t' + result_dict['giftname'] + '\t' + str(result_dict['time']))
+                #     self.db.save_to_mongodb(self.db.gift_table, **result_dict)
+                #     data['gfcnt'] -= 1
+                self.db.save_to_mongodb(self.db.gift_table, **result_dict)
 
     def anbc(self, data):  # 开通贵族，续费好像不是这个关键字
         if data['drid'] == self.roomid:
