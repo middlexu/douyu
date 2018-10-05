@@ -1,9 +1,8 @@
 # !usr/bin/env python
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 # author: middle
 # time: 2018/4/16
 
-# -*- encoding: utf-8 -*-
 
 from pymongo import MongoClient
 import pandas as pd
@@ -12,11 +11,11 @@ import datetime
 # from urllib.parse import quote_plus
 
 MONGO_TABLE = 'f4_gift'
-host = '127.0.0.1'
-# host = '47.104.21.73'
+# host = '127.0.0.1'
+host = '47.98.221.227'
 client = MongoClient(host)
-# client.douyu.authenticate("douyu", "Xu731583158", mechanism='SCRAM-SHA-1')
-client.douyu.authenticate("douyu", "password", mechanism='SCRAM-SHA-1')
+
+client.douyu.authenticate("douyu", "password", mechanism='MONGODB-CR')
 db = client["douyu"]
 collection = db[MONGO_TABLE]
 
@@ -67,7 +66,7 @@ data_grouped = data_grouped.sort_values(by='总计', ascending=False)
 data_grouped.loc['总计'] = data_grouped.apply(lambda x: x.sum())
 # print(data_grouped)
 
-# data_grouped.to_csv(MONGO_TABLE + riqi + '.csv', encoding='gbk')
+data_grouped.to_csv(MONGO_TABLE + riqi + '.csv', encoding='utf-8')
 
 client.close()  # 一定要关闭
 

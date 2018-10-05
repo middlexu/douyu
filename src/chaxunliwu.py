@@ -16,7 +16,7 @@ import requests
 class Gift():
     def __init__(self, roomid):
         self.roomid = roomid
-        self.data = json.loads(requests.get('http://open.douyucdn.cn/api/RoomApi/room/'+self.roomid).content)['data']['gift']
+        self.data = json.loads(requests.get('http://open.douyucdn.cn/api/RoomApi/room/'+self.roomid).content.decode('utf-8'))['data']['gift']
 
     def handle(self):
         self.data_handled = {}

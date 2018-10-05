@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 from conf.settings import *
 import pymongo
 # import json
@@ -9,7 +10,7 @@ import pymongo
 class SaveDb():
     def __init__(self, room_nickname):
         self.client = pymongo.MongoClient(MONGO_URI)
-        self.client.douyu.authenticate(DB_USER, DB_PWD, mechanism='SCRAM-SHA-1')
+        self.client.douyu.authenticate(DB_USER, DB_PWD, mechanism='SCRAM-SHA-1')  #MONGODB-CR
         self.db = self.client[MONGO_DB]
         self.danmu_table = room_nickname + '_danmu'
         self.gift_table = room_nickname + '_gift'
