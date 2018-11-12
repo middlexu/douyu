@@ -10,12 +10,12 @@ from functools import cmp_to_key
 import datetime
 # from urllib.parse import quote_plus
 
-MONGO_TABLE = 'f4_gift'
-# host = '127.0.0.1'
+MONGO_TABLE = '9438_gift'
 host = '47.98.221.227'
+
 client = MongoClient(host)
 
-client.douyu.authenticate("douyu", "password", mechanism='MONGODB-CR')
+client.douyu.authenticate("douyu", "password", mechanism='SCRAM-SHA-1')
 db = client["douyu"]
 collection = db[MONGO_TABLE]
 
@@ -26,9 +26,10 @@ yue = datetime.datetime.now().month
 ri = datetime.datetime.now().day
 
 riqi = '%s-%s-%s'%(nian, yue, ri)
-time_start = datetime.datetime(nian, yue, ri, 0, 0)
-time_end = time_start + datetime.timedelta(days=1)
-# time_end = datetime.datetime(2018, 8, 1, 0, 0)
+# time_start = datetime.datetime(nian, yue, ri, 0, 0)
+# time_end = time_start + datetime.timedelta(days=1)
+time_start = datetime.datetime(2018, 11, 11, 0, 0)
+time_end = datetime.datetime(2018, 11, 12, 0, 0)
 
 # data = pd.DataFrame(list(collection.find({'time':{'$regex': riqi}} ,{'_id': 0})))
 data = pd.DataFrame(list(collection.find({'time': {'$gte': time_start, '$lte': time_end}}, {'_id': 0})))

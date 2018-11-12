@@ -45,3 +45,16 @@ if __name__ == '__main__':
     except KeyboardInterrupt:  # 没啥用，只是主线程退出，子线程还在运行
         print('KeyboardInterrupt')
         sys.exit(1)  # 不起作用，不会退出子线程
+
+
+# 单独某个房间出错了
+# Exception in thread 485503:
+# Traceback (most recent call last):
+#   File "/usr/lib/python3.5/threading.py", line 914, in _bootstrap_inner
+#     self.run()
+#   File "/usr/lib/python3.5/threading.py", line 862, in run
+#     self._target(*self._args, **self._kwargs)
+#   File "/root/douyu/src/douyu.py", line 100, in run
+#     data = data + self.dyclient.recv(BUFSIZ)
+# ConnectionResetError: [Errno 104] Connection reset by peer
+# 这个BUG未处理

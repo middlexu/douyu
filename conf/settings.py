@@ -23,11 +23,16 @@ from collections import namedtuple
 
 # F4, 339, 9438, 正直博, 401
 Room = namedtuple('Room', 'roomid nickname')
-ROOM_ID_LIST = [Room('318624', 'f4'), 
-                Room('485503', '339'), 
-                Room('430489', '9438'), 
-                Room('533813', '正直博'), 
-                Room('229346', '401')]
+ROOM_ID_LIST = [
+                # Room('318624', 'f4'), 
+                # Room('485503', '339'), 
+                # Room('430489', '9438'), 
+                # Room('533813', '正直博'), 
+                # Room('229346', '401'),
+                # Room('288016', '英雄联盟官方赛事'),
+                # Room('25233', '小深深儿'),
+                Room('4632993', '小深深儿'),
+                ]
 
 
 
